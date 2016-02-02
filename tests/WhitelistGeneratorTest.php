@@ -8,7 +8,7 @@ class WhitelistGeneratorTest extends SapphireTest{
         parent::setUp();
     }
 
-	function testGenerateWhitelist(){
+	public function testGenerateWhitelist(){
 		$whitelist = WhitelistGenerator::generateWhitelistRules();
 
 		$top1 = $this->objFromFixture('SiteTree', 'top1');
@@ -30,7 +30,7 @@ class WhitelistGeneratorTest extends SapphireTest{
 		$this->assertNotContains(trim($child5->relativeLink(),'/'), $whitelist);
 	}
 
-    function testWhitelistAfterDelete() {
+    public function testWhitelistAfterDelete() {
         $dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
         $whitelist = WhitelistGenerator::generateWhitelistRules();
         $top1 = $this->objFromFixture('SiteTree', 'top1');
@@ -71,7 +71,7 @@ class WhitelistGeneratorTest extends SapphireTest{
         );
     }
 
-    function testWhitelistAfterUnpublish() {
+    public function testWhitelistAfterUnpublish() {
         $dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
         $whitelist = WhitelistGenerator::generateWhitelistRules();
         $top1 = $this->objFromFixture('SiteTree', 'top1');
@@ -85,7 +85,7 @@ class WhitelistGeneratorTest extends SapphireTest{
         $this->assertTrue(file_exists($path));
     }
 
-    function testClearWhitelist() {
+    public function testClearWhitelist() {
         $whitelist = WhitelistGenerator::generateWhitelistRules();
         $files = $this->getFilesFromCacheDir();
         // Exact number depends on what addons are installed, so just go with 'some'
@@ -98,7 +98,7 @@ class WhitelistGeneratorTest extends SapphireTest{
         $this->assertEquals(1, sizeof($files));
     }
 
-	function testCustomControllerWhitelist() {
+	public function testCustomControllerWhitelist() {
 		$whitelist = WhitelistGenerator::generateWhitelistRules();
 
 		//test that custom class defined below is included in the whitelist
@@ -106,7 +106,7 @@ class WhitelistGeneratorTest extends SapphireTest{
 	}
 
 
-    function testFlush() {
+    public function testFlush() {
         $dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
 
         //Delete cache directory
