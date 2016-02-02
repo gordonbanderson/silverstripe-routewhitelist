@@ -1,4 +1,20 @@
 # Route Whitelist
+[![Build Status](https://travis-ci.org/gordonbanderson/silverstripe-routewhitelist.svg?branch=master)](https://travis-ci.org/gordonbanderson/silverstripe-routewhitelist)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-routewhitelist/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-routewhitelist/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-routewhitelist/badges/build.png?b=master)](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-routewhitelist/build-status/master)
+[![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-routewhitelist/coverage.svg?branch=master)](https://codecov.io/github/gordonbanderson/silverstripe-routewhitelist?branch=master)
+
+[![Latest Stable Version](https://poser.pugx.org/silverstripe/routewhitelist/version)](https://packagist.org/packages/silverstripe/routewhitelist)
+[![Latest Unstable Version](https://poser.pugx.org/silverstripe/routewhitelist/v/unstable)](//packagist.org/packages/silverstripe/routewhitelist)
+[![Total Downloads](https://poser.pugx.org/silverstripe/routewhitelist/downloads)](https://packagist.org/packages/silverstripe/routewhitelist)
+[![License](https://poser.pugx.org/silverstripe/routewhitelist/license)](https://packagist.org/packages/silverstripe/routewhitelist)
+[![Monthly Downloads](https://poser.pugx.org/silverstripe/routewhitelist/d/monthly)](https://packagist.org/packages/silverstripe/routewhitelist)
+[![Daily Downloads](https://poser.pugx.org/silverstripe/routewhitelist/d/daily)](https://packagist.org/packages/silverstripe/routewhitelist)
+
+[![Dependency Status](https://www.versioneye.com/php/silverstripe:routewhitelist/badge.svg)](https://www.versioneye.com/php/silverstripe:routewhitelist)
+[![Reference Status](https://www.versioneye.com/php/silverstripe:routewhitelist/reference_badge.svg?style=flat)](https://www.versioneye.com/php/silverstripe:routewhitelist/references)
+
+![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-routewhitelist/branch.svg?branch=master)
 Provides a whitelist of known valid URL patterns in a SilverStripe website.
 
 ## Overview
@@ -38,4 +54,3 @@ at an appropriate location near the top of the mod_rewrite rules:
     RewriteCond %{REQUEST_URI} ^\/(.+?)(\/.*|\s*)$
     RewriteCond %{DOCUMENT_ROOT}/routewhitelistcache/%1 !-f 
 	RewriteRule  .* assets/error-404.html [L,R=404]
-
