@@ -112,8 +112,7 @@ class WhitelistGenerator extends Object implements Flushable {
 
 	public static function clearWhitelist(){
 		$dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
-        error_log('CLEARING ' . $dir);
-		if (!file_exists($dir)) {
+		if (file_exists($dir)) {
 			array_map('unlink', glob($dir."/*"));
 		}
 	}
