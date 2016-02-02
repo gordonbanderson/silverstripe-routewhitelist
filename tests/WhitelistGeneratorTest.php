@@ -62,12 +62,12 @@ class WhitelistGeneratorTest extends SapphireTest {
         $sourceArray = array(1, 2, 3, 4);
         $this->assertEquals(
             array(1, 2, 4),
-            array_values($sub->call_array_delete($sourceArray, 3))
+            array_values($sub->callArrayDelete($sourceArray, 3))
         );
 
         $this->assertEquals(
             array(1, 2, 3, 4),
-            $sub->call_array_delete($sourceArray, 6)
+            $sub->callArrayDelete($sourceArray, 6)
         );
     }
 
@@ -130,7 +130,7 @@ class WhitelistTestController extends ContentController implements TestOnly {
 }
 
 class SubWhitelistGenerator extends WhitelistGenerator implements TestOnly {
-    public function call_array_delete($array, $element) {
+    public function callArrayDelete($array, $element) {
         return $this->array_delete($array, $element);
     }
 }
