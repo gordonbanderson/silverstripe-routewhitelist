@@ -76,14 +76,14 @@ class WhitelistGeneratorTest extends SapphireTest{
     function testClearWhitelist() {
         $whitelist = WhitelistGenerator::generateWhitelistRules();
         $files = $this->getFilesFromCacheDir();
-        error_log(print_r($files,1));
-        $this->assertEquals(119, sizeof($files));
+        // Exact number depends on what addons are installed, so just go with 'some'
+        $this->assertGreaterThan(90, sizeof($files));
 
         WhitelistGenerator::clearWhitelist();
-        $files = $this->getFilesFromCacheDir();
-        //error_log(print_r($files,1));
-        $this->assertEquals(119, sizeof($files));
 
+        // clear the whitelist, only .htaccess should remain
+        $files = $this->getFilesFromCacheDir();
+        $this->assertEquals(1, sizeof($files));
     }
 
 	function testCustomControllerWhitelist() {
