@@ -2,7 +2,12 @@
 class WhitelistGeneratorTest extends SapphireTest{
 
 	protected static $fixture_file = 'WhitelistTest.yml';
-	
+
+    public function setUp() {
+        WhitelistGenerator::ensureWhitelistFolderExists();
+        parent::setUp();
+    }
+
 	function testGenerateWhitelist(){
 		$whitelist = WhitelistGenerator::generateWhitelistRules();
 
@@ -14,7 +19,7 @@ class WhitelistGeneratorTest extends SapphireTest{
 		$child3 = $this->objFromFixture('SiteTree', 'childchild1');
 		$child4 = $this->objFromFixture('SiteTree', 'childchild2');
 		$child5 = $this->objFromFixture('SiteTree', 'childchildchild1');
-		
+
 		$this->assertContains(trim($top1->relativeLink(),'/'), $whitelist);
 		$this->assertContains(trim($top2->relativeLink(),'/'), $whitelist);
 		$this->assertContains(trim($top3->relativeLink(),'/'), $whitelist);
@@ -25,17 +30,17 @@ class WhitelistGeneratorTest extends SapphireTest{
 		$this->assertNotContains(trim($child5->relativeLink(),'/'), $whitelist);
 
 	}
-	
+
 	function testCustomControllerWhitelist() {
 		$whitelist = WhitelistGenerator::generateWhitelistRules();
-		
+
 		//test that custom class defined below is included in the whitelist
 		$this->assertContains('WhitelistTestController', $whitelist);
 	}
-	
+
 }
 
 class WhitelistTestController extends ContentController {
-	
-	
+
+
 }
