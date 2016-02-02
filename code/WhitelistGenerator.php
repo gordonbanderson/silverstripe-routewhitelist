@@ -5,11 +5,11 @@ class WhitelistGenerator extends Object implements Flushable {
 		$whitelist = self::generateWhitelistRules();
 		self::syncCacheFilesystem($whitelist);
 	}
-	
+
 	static function generateWhitelistRules(){
 		//get all URL rules
 		$rules = Config::inst()->get('Director', 'rules');
-		
+
 		$allTopLevelRules = array();
 		foreach($rules as $pattern => $controllerOptions) {
 			//match first portion of the URL, either delimited by slash or colon or end-of-line
@@ -19,36 +19,36 @@ class WhitelistGenerator extends Object implements Flushable {
 				}
 			}
 		}
-		
+
 		$filteredRules = array();
 		foreach($allTopLevelRules as $rule) {
 			if (strpos($rule, '$') !== false) {
 				if ($rule === '$Controller') {
 					//special case for Controllers, add all possible controllers
 					$subControllers = ClassInfo::subclassesFor(new Controller());
-					
+
 					foreach($subControllers as $controller){
 						array_push($filteredRules, $controller);    //add the controller name as a link
-					} 
-					
+					}
+
 				} elseif ($rule === '$URLSegment') {
 					//special case for SiteTree, add all possible top Level Pages
 					$topLevelPages = SiteTree::get()->filter('ParentID', 0);
-					
+
 					foreach($topLevelPages as $page) {
 						$link = $page->RelativeLink();
 						array_push($filteredRules, trim($link, '\/ ')); //remove trailing or leading slashes from links
 					}
-					
+
 				} else {
 					user_error('Unknown wildcard URL match found: '.$rule, E_WARNING);
-					
+
 				}
 			} else {
 				//add the rule to a new list of rules
 				array_push($filteredRules, $rule);
 			}
-			
+
 		}
 
 		//filter duplicates (order doesn't matter here, as we are only interested in the first level of the rules)
@@ -57,7 +57,8 @@ class WhitelistGenerator extends Object implements Flushable {
 	}
 
 	static protected function array_delete($array, $element) {
-		return array_diff($array, [$element]);
+        $elementArray = array($element);
+		return array_diff($array, $elementArray);
 	}
 
 	/**
@@ -65,9 +66,9 @@ class WhitelistGenerator extends Object implements Flushable {
 	 */
 	static protected function syncCacheFilesystem($whitelist) {
 		$dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
-		
+
 		$whitelistFolderContents = scandir($dir);
-		
+
 		//create list of files to create
 		$toCreate = array();
 		foreach($whitelist as $listItem){
@@ -81,7 +82,7 @@ class WhitelistGenerator extends Object implements Flushable {
 		//create list of files to delete
 		$toDelete = array();
 		foreach($whitelistFolderContents as $file){
-			if (!in_array($file, array('','..','.','.htaccess'))) {    //exclude things that should stay in the folder 
+			if (!in_array($file, array('','..','.','.htaccess'))) {    //exclude things that should stay in the folder
 				if (!in_array($file, $whitelist)) {
 					array_push($toDelete, $file);
 				}
@@ -98,19 +99,20 @@ class WhitelistGenerator extends Object implements Flushable {
 			touch($dir . DIRECTORY_SEPARATOR . $create);
 		}
 	}
-	
+
 	static function ensureWhitelistFolderExists(){
 		$dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
 		if (!file_exists($dir)) {
 			mkdir($dir); //create a new whitelist dir
 			chmod($dir,0777);    //make sure it is readable by the web-server user
-			//create a htaccess file to ensure that the whitelist cache directory is not web-accessible 
+			//create a htaccess file to ensure that the whitelist cache directory is not web-accessible
 			file_put_contents($dir.DIRECTORY_SEPARATOR.'.htaccess', "Deny from all\n");
 		}
 	}
-	
+
 	public static function clearWhitelist(){
 		$dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
+        error_log('CLEARING ' . $dir);
 		if (!file_exists($dir)) {
 			array_map('unlink', glob($dir."/*"));
 		}
