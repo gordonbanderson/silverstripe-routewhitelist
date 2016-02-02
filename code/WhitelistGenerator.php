@@ -1,12 +1,12 @@
 <?php
 class WhitelistGenerator extends Object implements Flushable {
 
-	static function generateWhitelist(){
+	public static function generateWhitelist(){
 		$whitelist = self::generateWhitelistRules();
 		self::syncCacheFilesystem($whitelist);
 	}
 
-	static function generateWhitelistRules(){
+	public static function generateWhitelistRules(){
 		//get all URL rules
 		$rules = Config::inst()->get('Director', 'rules');
 
@@ -100,7 +100,7 @@ class WhitelistGenerator extends Object implements Flushable {
 		}
 	}
 
-	static function ensureWhitelistFolderExists(){
+	public static function ensureWhitelistFolderExists(){
 		$dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
 		if (!file_exists($dir)) {
 			mkdir($dir); //create a new whitelist dir
