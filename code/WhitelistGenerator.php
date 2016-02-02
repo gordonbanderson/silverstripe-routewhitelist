@@ -56,7 +56,7 @@ class WhitelistGenerator extends Object implements Flushable {
 		return $filteredRules;
 	}
 
-	static protected function array_delete($array, $element) {
+	protected static function array_delete($array, $element) {
         $elementArray = array($element);
 		return array_diff($array, $elementArray);
 	}
@@ -64,7 +64,7 @@ class WhitelistGenerator extends Object implements Flushable {
 	/**
 	 * Sync the list of all top-level routes with the file system whitelist cache
 	 */
-	static protected function syncCacheFilesystem($whitelist) {
+	protected static function syncCacheFilesystem($whitelist) {
 		$dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
 
 		$whitelistFolderContents = scandir($dir);
