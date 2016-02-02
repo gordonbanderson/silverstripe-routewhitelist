@@ -46,6 +46,19 @@ class WhitelistGeneratorTest extends SapphireTest{
         $this->assertFalse(file_exists($path));
     }
 
+    private function getFilesFromCacheDir() {
+        $dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
+        $files = array();
+        if ($handle = opendir($dir)) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != '.' && $entry != '..') {
+                    array_push($files, $entry);
+                }
+            }
+        }
+        return $files;
+    }
+
     function testWhitelistAfterUnpublish() {
         $dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
         $whitelist = WhitelistGenerator::generateWhitelistRules();
@@ -58,6 +71,19 @@ class WhitelistGeneratorTest extends SapphireTest{
         //Now assert that the same file has not been deleted, still exists on Stage
         $top1->doUnpublish();
         $this->assertTrue(file_exists($path));
+    }
+
+    function testClearWhitelist() {
+        $whitelist = WhitelistGenerator::generateWhitelistRules();
+        $files = $this->getFilesFromCacheDir();
+        error_log(print_r($files,1));
+        $this->assertEquals(119, sizeof($files));
+
+        WhitelistGenerator::clearWhitelist();
+        $files = $this->getFilesFromCacheDir();
+        //error_log(print_r($files,1));
+        $this->assertEquals(119, sizeof($files));
+
     }
 
 	function testCustomControllerWhitelist() {
