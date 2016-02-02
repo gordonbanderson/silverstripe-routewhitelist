@@ -1,5 +1,5 @@
 <?php
-class WhitelistGeneratorTest extends SapphireTest{
+class WhitelistGeneratorTest extends SapphireTest {
 
 	protected static $fixture_file = 'WhitelistTest.yml';
 
@@ -8,7 +8,7 @@ class WhitelistGeneratorTest extends SapphireTest{
         parent::setUp();
     }
 
-	function testGenerateWhitelist(){
+	function testGenerateWhitelist() {
 		$whitelist = WhitelistGenerator::generateWhitelistRules();
 
 		$top1 = $this->objFromFixture('SiteTree', 'top1');
@@ -20,14 +20,14 @@ class WhitelistGeneratorTest extends SapphireTest{
 		$child4 = $this->objFromFixture('SiteTree', 'childchild2');
 		$child5 = $this->objFromFixture('SiteTree', 'childchildchild1');
 
-		$this->assertContains(trim($top1->relativeLink(),'/'), $whitelist);
-		$this->assertContains(trim($top2->relativeLink(),'/'), $whitelist);
-		$this->assertContains(trim($top3->relativeLink(),'/'), $whitelist);
-		$this->assertNotContains(trim($child1->relativeLink(),'/'), $whitelist);
-		$this->assertNotContains(trim($child2->relativeLink(),'/'), $whitelist);
-		$this->assertNotContains(trim($child3->relativeLink(),'/'), $whitelist);
-		$this->assertNotContains(trim($child4->relativeLink(),'/'), $whitelist);
-		$this->assertNotContains(trim($child5->relativeLink(),'/'), $whitelist);
+		$this->assertContains(trim($top1->relativeLink(), '/'), $whitelist);
+		$this->assertContains(trim($top2->relativeLink(), '/'), $whitelist);
+		$this->assertContains(trim($top3->relativeLink(), '/'), $whitelist);
+		$this->assertNotContains(trim($child1->relativeLink(), '/'), $whitelist);
+		$this->assertNotContains(trim($child2->relativeLink(), '/'), $whitelist);
+		$this->assertNotContains(trim($child3->relativeLink(), '/'), $whitelist);
+		$this->assertNotContains(trim($child4->relativeLink(), '/'), $whitelist);
+		$this->assertNotContains(trim($child5->relativeLink(), '/'), $whitelist);
 	}
 
     function testWhitelistAfterDelete() {
@@ -59,14 +59,14 @@ class WhitelistGeneratorTest extends SapphireTest{
 
     public function testArrayDelete() {
         $sub = new SubWhitelistGenerator();
-        $sourceArray = array(1,2,3,4);
+        $sourceArray = array(1, 2, 3, 4);
         $this->assertEquals(
-            array(1,2,4),
+            array(1, 2, 4),
             array_values($sub->call_array_delete($sourceArray, 3))
         );
 
         $this->assertEquals(
-            array(1,2,3,4),
+            array(1, 2, 3, 4),
             $sub->call_array_delete($sourceArray, 6)
         );
     }
