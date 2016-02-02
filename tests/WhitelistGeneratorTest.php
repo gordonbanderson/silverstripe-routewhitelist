@@ -28,8 +28,6 @@ class WhitelistGeneratorTest extends SapphireTest{
 		$this->assertNotContains(trim($child3->relativeLink(),'/'), $whitelist);
 		$this->assertNotContains(trim($child4->relativeLink(),'/'), $whitelist);
 		$this->assertNotContains(trim($child5->relativeLink(),'/'), $whitelist);
-
-        error_log(print_r($whitelist, 1));
 	}
 
     function testWhitelistAfterDelete() {
@@ -93,9 +91,26 @@ class WhitelistGeneratorTest extends SapphireTest{
 		$this->assertContains('WhitelistTestController', $whitelist);
 	}
 
+
+    function testFlush() {
+        $dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
+
+        //Delete cache directory
+        WhitelistGenerator::clearWhitelist();
+        array_map('unlink', glob("$dir/.htaccess"));
+        rmdir($dir);
+
+        //Flush
+        WhitelistGenerator::flush();
+        $files = $this->getFilesFromCacheDir();
+
+        // Exact number depends on what addons are installed, so just go with 'some'
+        $this->assertGreaterThan(90, sizeof($files));
+    }
+
 }
 
-class WhitelistTestController extends ContentController {
+class WhitelistTestController extends ContentController implements TestOnly {
 
 
 }
