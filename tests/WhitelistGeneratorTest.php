@@ -29,7 +29,36 @@ class WhitelistGeneratorTest extends SapphireTest{
 		$this->assertNotContains(trim($child4->relativeLink(),'/'), $whitelist);
 		$this->assertNotContains(trim($child5->relativeLink(),'/'), $whitelist);
 
+        error_log(print_r($whitelist, 1));
 	}
+
+    function testWhitelistAfterDelete() {
+        $dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
+        $whitelist = WhitelistGenerator::generateWhitelistRules();
+        $top1 = $this->objFromFixture('SiteTree', 'top1');
+        $path = $dir . '/' . $top1->URLSegment;
+
+        //Check that relevant file exists in cache directory of checks
+        $this->assertTrue(file_exists($path));
+
+        //Now assert that the same file has been rightfully deleted
+        $top1->delete();
+        $this->assertFalse(file_exists($path));
+    }
+
+    function testWhitelistAfterUnpublish() {
+        $dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
+        $whitelist = WhitelistGenerator::generateWhitelistRules();
+        $top1 = $this->objFromFixture('SiteTree', 'top1');
+        $path = $dir . '/' . $top1->URLSegment;
+
+        //Check that relevant file exists in cache directory of checks
+        $this->assertTrue(file_exists($path));
+
+        //Now assert that the same file has not been deleted, still exists on Stage
+        $top1->doUnpublish();
+        $this->assertTrue(file_exists($path));
+    }
 
 	function testCustomControllerWhitelist() {
 		$whitelist = WhitelistGenerator::generateWhitelistRules();
