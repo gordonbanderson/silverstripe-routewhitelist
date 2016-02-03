@@ -5,6 +5,7 @@ class WhitelistGeneratorTest extends SapphireTest {
 
     public function setUp() {
         WhitelistGenerator::ensureWhitelistFolderExists();
+        WhitelistGenerator::clearWhitelist();
         parent::setUp();
     }
 
