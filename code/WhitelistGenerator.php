@@ -3,7 +3,17 @@ class WhitelistGenerator extends Object implements Flushable {
 
 	public static function generateWhitelist(){
 		$whitelist = self::generateWhitelistRules();
-		self::syncCacheFilesystem($whitelist);
+        $apacheEnabled = Config::inst()->get('WhitelistGenerator', 'generate_apache');
+        error_log('APACHE EnABLED: ' . $apacheEnabled);
+        if ($apacheEnabled) {
+            self::syncCacheFilesystem($whitelist);
+        }
+
+        $nginxEnabled = Config::inst()->get('WhitelistGenerator', 'generate_nginx');
+        if ($nginxEnabled) {
+            self::syncNginx($whitelist);
+        }
+
 	}
 
 	public static function generateWhitelistRules(){
@@ -60,6 +70,28 @@ class WhitelistGenerator extends Object implements Flushable {
         $elementArray = array($element);
 		return array_diff($array, $elementArray);
 	}
+
+    /*
+    Create an includeable nginx config file with a whitelist
+     */
+    private static function syncNginx($whitelist) {
+        $cfg_template = 'location / {'
+                        . 'if ( \$uri !~ ^/(WHITELIST) ) {'
+                        . ' rewrite ^ /server/index.php last;'
+                        . "\t}\n}";
+
+        $filecfg = array();
+        foreach ($whitelist as $whitelisted) {
+            array_push($filecfg, $whitelisted);
+        }
+        $regex = implode('|', $filecfg);
+        $cfg = str_replace('WHITELIST', $regex, $cfg_template);
+        $dir = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get('WhitelistGenerator', 'dir');
+        $nginxPath = $dir . '/' . 'nginx-whitelist.conf';
+        $nginxFile = fopen($nginxPath, "w");
+        fwrite($nginxFile, $cfg);
+        fclose($nginxFile);
+    }
 
 	/**
 	 * Sync the list of all top-level routes with the file system whitelist cache
