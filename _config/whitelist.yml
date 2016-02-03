@@ -7,3 +7,5 @@ SiteTree:
     - SiteTreeWhitelistExtension
 WhitelistGenerator:
   dir: 'routewhitelistcache'
+  generate_apache: true
+  generate_nginx: true
